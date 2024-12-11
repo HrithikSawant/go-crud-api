@@ -20,7 +20,11 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.23.0 // indirect
+<<<<<<< HEAD
 	github.com/goccy/go-json v0.10.4 // indirect
+=======
+	github.com/goccy/go-json v0.10.3 // indirect
+>>>>>>> 8f83ee6 (go crud init)
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
@@ -41,7 +45,11 @@ require (
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/arch v0.12.0 // indirect
+<<<<<<< HEAD
 	golang.org/x/crypto v0.31.0 // indirect
+=======
+	golang.org/x/crypto v0.30.0 // indirect
+>>>>>>> 8f83ee6 (go crud init)
 	golang.org/x/net v0.32.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
