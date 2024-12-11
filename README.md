@@ -2,7 +2,6 @@
 
 ![Go CRUD REST API Logo](.assets/GoRest.jpeg)
 
-
 [![GoDoc](https://pkg.go.dev/badge/github.com/HrithikSawant/go-crud-api)](https://pkg.go.dev/github.com/HrithikSawant/go-crud-api)
 ![Supported Go Versions](https://img.shields.io/badge/Go-1.20%2C%201.21%2C%201.22-lightgrey.svg)
 [![Made with Gin](https://img.shields.io/badge/made_with-Gin-00b59c.svg)](https://gin-gonic.com/)
@@ -11,9 +10,6 @@
 [![GORM Supported](https://img.shields.io/badge/GORM-Supported-9c1e5e.svg)](https://gorm.io/)
 [![Make Supported](https://img.shields.io/badge/Make-Supported-2d3138.svg)](https://www.gnu.org/software/make/)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-
-
-
 
 ## Overview
 This repository provides a simple REST API for managing student records. The API is built using Golang, Gin framework, GORM for ORM, and PostgreSQL for database management.
