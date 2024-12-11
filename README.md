@@ -1,6 +1,6 @@
 # GO CRUD REST API
 
-![Go CRUD REST API Logo](https://github.com/HrithikSawant/go-crud-api/raw/master/.assets/GoRest.jpeg)
+![Go CRUD REST API Logo](https://github.com/HrithikSawant/go-crud-api/blob/main/.assets/GoRest.jpeg)
 
 
 [![GoDoc](https://pkg.go.dev/badge/github.com/HrithikSawant/go-crud-api)](https://pkg.go.dev/github.com/HrithikSawant/go-crud-api)
