@@ -1,6 +1,6 @@
 # GO CRUD REST API
 
-![Go CRUD REST API Logo](https://github.com/HrithikSawant/go-crud-api/blob/level-2/.assets/GoRest.jpeg)
+![Go CRUD REST API Logo](https://github.com/HrithikSawant/go-crud-api/blob/level-3/.assets/GoRest.jpeg)
 
 
 [![GoDoc](https://pkg.go.dev/badge/github.com/HrithikSawant/go-crud-api)](https://pkg.go.dev/github.com/HrithikSawant/go-crud-api)
@@ -17,20 +17,37 @@
 
 ## Overview
 
-This branch introduces containerization to the REST API. By using Docker, the API is portable, easier to deploy, and follows best practices for modern application development.
+This branch introduces a one-click local development setup with **Docker Compose** for running the Go API and its dependent services (e.g., PostgreSQL database). It aims to simplify the process of setting up the environment for developers by automating the setup using a `Makefile`, allowing for the start-up of the services with minimal configuration.
 
-## Features of Containerization
+## Features
 
-- Multi-stage Dockerfile for optimized build and runtime.
-- Environment variables injection at runtime.
-- Semantic version tagging for Docker images.
-- Reduced image size for efficient deployment.
+- **Docker Compose** for managing multiple containers (Go API and PostgreSQL).
+- **Makefile** targets for setting up and running the containers with simple commands.
+- **Automatic database migration** on container start.
+- One-click setup to initialize and run the application.
 
 ## Prerequisites
 
-Ensure the following are installed:
-- Docker
-- Make
+Ensure the following tools are installed on your system:
+- **Docker** (for containerization)
+- **Docker Compose** (for managing multi-container applications)
+- **Make** (for automating commands)
+
+You can follow the installation instructions for these tools here:
+- [Docker Installation](https://docs.docker.com/get-docker/)
+- [Docker Compose Installation](https://docs.docker.com/compose/install/)
+- [Make Installation](https://www.gnu.org/software/make/)
+
+## Local Development Setup
+
+### Step 1: Clone the Repository
+
+First, clone the repository to your local machine:
+
+```bash
+git clone https://github.com/HrithikSawant/go-crud-api.git
+cd go-crud-api
+```
 
 ## Building and Running with Docker
 

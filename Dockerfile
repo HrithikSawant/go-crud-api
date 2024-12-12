@@ -4,8 +4,11 @@ FROM golang:1.23-alpine as builder
 # Set environment variables for Go build
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 
-# Install necessary build tools and remove cache to reduce image size
-RUN apk --no-cache add git
+# Update and install necessary build tools, git, and a shell (bash)
+RUN apk update && apk --no-cache add git build-base bash
+
+# Install golang-migrate tool (for running migrations)
+RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -20,16 +23,20 @@ COPY . .
 # Build the application binary
 RUN go build -o app .
 
-# Stage 2: Final runtime image
-FROM gcr.io/distroless/static:nonroot
+# Stage 2: Final runtime image with bash and migrate tool
+FROM alpine:3.18
+
+# Install bash and migrate tool in the runtime image
+RUN apk --no-cache add bash
 
 # Set working directory in runtime container
 WORKDIR /app
 
-# Copy the compiled binary from the builder stage
+# Copy the compiled binary and migrate tool from the builder stage
 COPY --from=builder /app/app .
+COPY --from=builder /go/bin/migrate /usr/local/bin/migrate
 
-# Copy only the necessary environment and migration files
+# Copy environment and migration files
 COPY .env /app/.env
 COPY db/migrations /app/db/migrations
 
@@ -38,6 +45,3 @@ EXPOSE 3000
 
 # Command to run the application
 CMD ["/app/app"]
-
-
-

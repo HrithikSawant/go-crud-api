@@ -55,15 +55,15 @@ docker-clean:
 	@echo "Removing dangling Docker images..."
 	docker image prune -f
 
-migrate-create:
-	migrate create -ext sql -dir $(DB_MIGRATION_FILE) -seq student_schema
-	$(MAKE) migrate-up
-
 # Run database migrations
 # Install migration tool
 migrate-install:
 	@echo "Installing PostgreSQL v4 database migrations..."
 	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+migrate-create:
+	migrate create -ext sql -dir $(DB_MIGRATION_FILE) -seq student_schema
+	$(MAKE) migrate-up
 
 .PHONY: migrate-up
 migrate-up:
@@ -91,6 +91,18 @@ migrate-force:
 	@echo "forcing database migrations to 1..."
 	migrate -path $(DB_MIGRATION_FILE) -database $(DATABASE_URL) force 1
 
+# Run the Docker container using Docker Compose
+.PHONY: docker-compose-up
+docker-compose-up:
+	@echo "Starting the app and db containers with Docker Compose..."
+	docker-compose up --build
+
+# Stop the Docker containers using Docker Compose
+.PHONY: docker-compose-down
+docker-compose-down:
+	@echo "Stopping the app and db containers with Docker Compose..."
+	docker-compose down
+
 # Help message
 .PHONY: help
 help:
@@ -103,6 +115,8 @@ help:
 	@echo "  docker-run     - Run the Docker container"
 	@echo "  docker-push    - Push the Docker image to a registry"
 	@echo "  docker-clean   - Remove dangling Docker images"
+	@echo "  docker-compose-up - Start app and db containers using Docker Compose"
+	@echo "  docker-compose-down - Stop app and db containers using Docker Compose"
 	@echo "  migrate-create - Generate a new database migration"
 	@echo "  migrate-up     - Run database migrations"
 	@echo "  migrate-down   - Rollback database migrations"
