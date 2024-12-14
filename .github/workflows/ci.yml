@@ -27,26 +27,38 @@ jobs:
         with:
           go-version: '1.23'
 
-      # Step 4: Build the application
+      # Step 4: Create .env file with secrets
+      - name: Create .env file
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" > .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env
+          echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env
+          echo "DB_MIGRATION_FILE=${{ secrets.DB_MIGRATION_FILE }}" >> .env
+
+
+      # Step 5: Build the application
       - name: 🏗️ Build the API
         run: make build
 
-      # Step 5: Run tests Commented for testing  (unable it later)
+      # Step 6: Run tests Commented for testing  (unable it later)
       # - name: 🧪 Run Tests
       #   run: make test
 
-      # Step 6: Lint the code
+      # Step 7: Lint the code
       - name: 🔍 Lint Code
         run: make lint
 
-      # Step 7: Docker login to DockerHub or GitHub Container Registry
+      # Step 8: Docker login to DockerHub or GitHub Container Registry
       - name: 🔐 Docker Login
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}  # Docker Hub username from GitHub secrets
           password: ${{ secrets.DOCKER_PASSWORD }}  # Docker Hub password from GitHub secrets
 
-      # Step 8: Build Docker image
+      # Step 9: Build Docker image
       - name: 🏗️ Build Docker Image
         run: |
           echo "🔨 Building Docker image for ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest"
@@ -54,7 +66,7 @@ jobs:
           VERSION_TAG="${GITHUB_SHA::7}"  # Use first 7 characters of the commit hash for versioning
           docker tag ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest ${{ secrets.DOCKER_USERNAME }}/go-crud-api:$VERSION_TAG
 
-      # Step 9: Push Docker image to DockerHub or GitHub Container Registry
+      # Step 10: Push Docker image to DockerHub or GitHub Container Registry
       - name: 🚢 Push Docker Image
         run: |
           echo "🚀 Pushing Docker image to ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest"
@@ -62,14 +74,14 @@ jobs:
           echo "🚀 Pushing Docker image to ${{ secrets.DOCKER_USERNAME }}/go-crud-api:$VERSION_TAG"
           docker push ${{ secrets.DOCKER_USERNAME }}/go-crud-api:$VERSION_TAG
 
-      # Step 10: List contents in the workspace for debugging
+      # Step 11: List contents in the workspace for debugging
       - name: 📂 List workspace contents
         run: ls -la ${{ github.workspace }}
 
-      # Step 11: Display the job status
+      # Step 12: Display the job status
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
-      # Step 12: Notify success or failure (Optional, could be integrated with Slack, etc.)
+      # Step 13: Notify success or failure (Optional, could be integrated with Slack, etc.)
       - name: 🎯 Notify on success/failure (optional)
         if: success()
         run: echo "✅ The CI pipeline has completed successfully!"
