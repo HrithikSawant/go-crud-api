@@ -1,0 +1,74 @@
+name: 🚀 CI Pipeline Github Actions
+run-name: ${{ github.actor }} is Local CI Setup 🚀
+
+on:
+  push:
+    branches:
+      - level-4  # Trigger on changes to the level-4 branch
+  workflow_dispatch:  # Allow manual triggering of the pipeline
+
+jobs:
+  CI:
+    runs-on: self-hosted  # Use a self-hosted runner
+    
+    steps:
+      # Step 1: Initial message to the user
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 Branch ${{ github.ref }} and Repository ${{ github.repository }}."
+      
+      # Step 2: Checkout the code
+      - name: 🛠️ Checkout Code
+        uses: actions/checkout@v2
+
+      # Step 3: Set up Go environment
+      - name: 🦸‍♂️ Set up Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.23'
+
+      # Step 4: Build the application
+      - name: 🏗️ Build the API
+        run: make build
+
+      # Step 5: Run tests
+      - name: 🧪 Run Tests
+        run: make test
+
+      # Step 6: Lint the code
+      - name: 🔍 Lint Code
+        run: make lint
+
+      # Step 7: Docker login to DockerHub or GitHub Container Registry
+      - name: 🔐 Docker Login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}  # Docker Hub username from GitHub secrets
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Docker Hub password from GitHub secrets
+
+      # Step 8: Build Docker image
+      - name: 🏗️ Build Docker Image
+        run: |
+          echo "🔨 Building Docker image for ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest"
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest .
+
+      # Step 9: Push Docker image to DockerHub or GitHub Container Registry
+      - name: 🚢 Push Docker Image
+        run: |
+          echo "🚀 Pushing Docker image to ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest"
+          docker push ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest
+
+      # Step 10: List contents in the workspace for debugging
+      - name: 📂 List workspace contents
+        run: ls -la ${{ github.workspace }}
+
+      # Step 11: Display the job status
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      # Step 12: Notify success or failure (Optional, could be integrated with Slack, etc.)
+      - name: 🎯 Notify on success/failure (optional)
+        if: success()
+        run: echo "✅ The CI pipeline has completed successfully!"
+      - name: ❌ Notify on failure (optional)
+        if: failure()
+        run: echo "⚠️ The CI pipeline has failed. Please check the logs."
