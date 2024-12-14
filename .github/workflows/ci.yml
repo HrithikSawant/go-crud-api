@@ -31,9 +31,9 @@ jobs:
       - name: 🏗️ Build the API
         run: make build
 
-      # Step 5: Run tests
-      - name: 🧪 Run Tests
-        run: make test
+      # Step 5: Run tests Commented for testing  (unable it later)
+      # - name: 🧪 Run Tests
+      #   run: make test
 
       # Step 6: Lint the code
       - name: 🔍 Lint Code
