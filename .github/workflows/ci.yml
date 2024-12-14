@@ -63,11 +63,7 @@ jobs:
         run: |
           echo "🔨 Building Docker image"
           docker build -t ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest .
-          
-          # Get the short commit hash and tag the image with it
-          VERSION_TAG=$(git rev-parse --short HEAD)
-          echo "Version Tag: $VERSION_TAG"  # Debugging line to check the value
-          docker tag ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest ${{ secrets.DOCKER_USERNAME }}/go-crud-api:$VERSION_TAG
+          docker tag ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest ${{ secrets.DOCKER_USERNAME }}/go-crud-api:$(git rev-parse --short HEAD)
 
       # Step 10: Push Docker image to DockerHub or GitHub Container Registry
       - name: 🚢 Push Docker Image
@@ -75,7 +71,7 @@ jobs:
           echo "🚀 Pushing Docker image to ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest"
           docker push ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest
           echo "🚀 Pushing Docker image to ${{ secrets.DOCKER_USERNAME }}/go-crud-api:$VERSION_TAG"
-          docker push ${{ secrets.DOCKER_USERNAME }}/go-crud-api:$VERSION_TAG
+          docker push ${{ secrets.DOCKER_USERNAME }}/go-crud-api:$(git rev-parse --short HEAD)
 
       # Step 11: List contents in the workspace for debugging
       - name: 📂 List workspace contents
