@@ -15,7 +15,7 @@ all: build
 .PHONY: build
 build:
 	@echo "Building the Go application..."
-	mkdir ./bin
+	@if [ ! -d ./bin ]; then mkdir ./bin; fi
 	go build -o bin/$(APP_NAME) .
 
 # Run the application locally
@@ -46,7 +46,7 @@ docker-run:
 # Push Docker image to a registry
 .PHONY: docker-push
 docker-push:
-	@echo "Pushing the Docker image..."
+	@echo "Pushing the Docker image to the registry..."
 	docker push $(DOCKER_IMAGE)
 
 # Docker Clean (optional if needed)
@@ -103,23 +103,30 @@ docker-compose-down:
 	@echo "Stopping the app and db containers with Docker Compose..."
 	docker-compose down
 
+# Lint the code
+.PHONY: lint
+lint:
+	@echo "Linting the Go code..."
+	golint ./...
+
 # Help message
 .PHONY: help
 help:
 	@echo "Available commands:"
-	@echo "  build          - Build the Go application locally"
-	@echo "  run            - Run the application locally"
-	@echo "  test           - Run tests"
-	@echo "  clean          - Clean up build artifacts"
-	@echo "  docker-build   - Build the Docker image"
-	@echo "  docker-run     - Run the Docker container"
-	@echo "  docker-push    - Push the Docker image to a registry"
-	@echo "  docker-clean   - Remove dangling Docker images"
-	@echo "  docker-compose-up - Start app and db containers using Docker Compose"
+	@echo "  build               - Build the Go application locally"
+	@echo "  run                 - Run the application locally"
+	@echo "  test                - Run tests"
+	@echo "  clean               - Clean up build artifacts"
+	@echo "  docker-build        - Build the Docker image"
+	@echo "  docker-run          - Run the Docker container"
+	@echo "  docker-push         - Push the Docker image to a registry"
+	@echo "  docker-clean        - Remove dangling Docker images"
+	@echo "  docker-compose-up   - Start app and db containers using Docker Compose"
 	@echo "  docker-compose-down - Stop app and db containers using Docker Compose"
-	@echo "  migrate-create - Generate a new database migration"
-	@echo "  migrate-up     - Run database migrations"
-	@echo "  migrate-down   - Rollback database migrations"
+	@echo "  migrate-create      - Generate a new database migration"
+	@echo "  migrate-up          - Run database migrations"
+	@echo "  migrate-down        - Rollback database migrations"
+	@echo "  lint                - Lint the Go code"
 
 # Install Go dependencies
 install-go-gets:
