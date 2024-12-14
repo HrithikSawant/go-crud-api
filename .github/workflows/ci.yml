@@ -58,12 +58,15 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}  # Docker Hub username from GitHub secrets
           password: ${{ secrets.DOCKER_PASSWORD }}  # Docker Hub password from GitHub secrets
 
-      # Step 9: Build Docker image
-      - name: 🏗️ Build Docker Image
+      # Step 9: Build the Docker image and tag it with "latest" and commit hash
+      - name: Build and Tag Docker Image
         run: |
-          echo "🔨 Building Docker image for ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest"
+          echo "🔨 Building Docker image"
           docker build -t ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest .
-          VERSION_TAG="${GITHUB_SHA::7}"  # Use first 7 characters of the commit hash for versioning
+          
+          # Get the short commit hash and tag the image with it
+          VERSION_TAG=$(git rev-parse --short HEAD)
+          echo "Version Tag: $VERSION_TAG"  # Debugging line to check the value
           docker tag ${{ secrets.DOCKER_USERNAME }}/go-crud-api:latest ${{ secrets.DOCKER_USERNAME }}/go-crud-api:$VERSION_TAG
 
       # Step 10: Push Docker image to DockerHub or GitHub Container Registry
