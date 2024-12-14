@@ -1,4 +1,4 @@
-// repository/application_repository.go
+// Package repository provides functions for interacting with the database for application-related entities.
 package repository
 
 import (

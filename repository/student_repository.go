@@ -1,4 +1,4 @@
-// repository/student_repository.go
+// Package repository contains methods for interacting with the database for student-related operations.
 package repository
 
 import (

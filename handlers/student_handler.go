@@ -1,4 +1,4 @@
-// handlers/student_handler.go
+// Package handlers provides HTTP handlers for managing student-related operations.
 package handlers
 
 import (
@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// StudentHandler handles HTTP requests related to student operations.
 type StudentHandler struct {
 	studentService service.StudentService
 }

@@ -40,7 +40,7 @@ func main() {
 	appHandler := handlers.NewApplicationHandler(appService)
 
 	// Initiate server
-	serverConfig := server.ServerConfig{
+	serverConfig := server.Config{
 		Port:    os.Getenv("SERVER_PORT"),
 		Address: os.Getenv("SERVER_HOST"),
 	}

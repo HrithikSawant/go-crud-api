@@ -1,4 +1,4 @@
-// service/student_service.go
+// Package service contains the business logic and operations for managing student-related tasks.
 package service
 
 import (

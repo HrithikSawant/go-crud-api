@@ -1,3 +1,4 @@
+// Package server contains the configuration and logic for initializing and running the application server.
 package server
 
 import (
@@ -7,14 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ServerConfig holds configuration for the server
-type ServerConfig struct {
+// Config holds configuration for the server
+type Config struct {
 	Port    string
 	Address string
 }
 
 // InitiateServer starts the Gin server with the given config and handler
-func InitiateServer(config ServerConfig, appHandler *handlers.ApplicationHandler) {
+func InitiateServer(config Config, appHandler *handlers.ApplicationHandler) {
 	r := gin.Default()
 
 	// Register routes through the handler
@@ -26,5 +27,4 @@ func InitiateServer(config ServerConfig, appHandler *handlers.ApplicationHandler
 	} else {
 		log.Printf("Server started successfully on %s:%s", config.Address, config.Port)
 	}
-
 }
