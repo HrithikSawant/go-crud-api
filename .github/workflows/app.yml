@@ -1,5 +1,5 @@
-name: 🚀 CI Pipeline Github Actions
-run-name: ${{ github.actor }} is Local CI Setup 🚀
+name: 🚀 CI/CD Pipeline Github Actions
+run-name: ${{ github.actor }} is Production ready Setup 🚀
 
 on:
   push:
@@ -89,6 +89,7 @@ jobs:
         run: echo "⚠️ The CI pipeline has failed. Please check the logs."
 
   CD:
+    needs: CI  # Make sure the CD job waits for CI job completion
     runs-on: self-hosted
     steps:
       - name: 🔑 Set up SSH key, 📄 Copy docker-compose file to prod, and 🚀 Trigger deployment
