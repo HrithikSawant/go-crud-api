@@ -91,7 +91,7 @@ jobs:
   CD:
     runs-on: self-hosted
     steps:
-      - name: 🔑 Set up SSH key, 📄 Copy docker-compose file, and 🚀 Trigger deployment
+      - name: 🔑 Set up SSH key, 📄 Copy docker-compose file to prod, and 🚀 Trigger deployment
         env:
           VAGRANT_SSH_KEY: ${{ secrets.VAGRANT_SSH_KEY }}
           DOCKER_COMPOSE_PATH: ${{ secrets.DOCKER_COMPOSE_PATH }}
