@@ -87,3 +87,20 @@ jobs:
       - name: ❌ Notify on failure (optional)
         if: failure()
         run: echo "⚠️ The CI pipeline has failed. Please check the logs."
+
+  CD:
+    runs-on: self-hosted
+    steps:
+      - name: 🔑 Set up SSH key, 📄 Copy docker-compose file, and 🚀 Trigger deployment
+        env:
+          VAGRANT_SSH_KEY: ${{ secrets.VAGRANT_SSH_KEY }}
+          DOCKER_COMPOSE_PATH: ${{ secrets.DOCKER_COMPOSE_PATH }}
+          ENV_FILE_PATH: ${{ secrets.ENV_FILE_PATH }}
+          NGINX_FILE_PATH: ${{ secrets.NGINX_FILE_PATH }}
+        run: |
+          echo "$VAGRANT_SSH_KEY" | tr -d '\r' > id_rsa
+          chmod 0400 id_rsa
+          # No ssh-add, directly using the private key
+          scp -i id_rsa -P 2222 $DOCKER_COMPOSE_PATH $ENV_FILE_PATH $NGINX_FILE_PATH vagrant@127.0.0.1:/home/vagrant
+          ssh -i id_rsa -p 2222 vagrant@127.0.0.1 "sudo docker compose up -d"
+
