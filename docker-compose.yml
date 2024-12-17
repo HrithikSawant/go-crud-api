@@ -18,10 +18,8 @@ services:
       - go-crud-network  
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: go_crud_api
+    image: hrithiksawant/go-crud-api:latest
+    container_name: go_crud_api_1
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
@@ -39,7 +37,46 @@ services:
       - db
     restart: unless-stopped
     networks:
-      - go-crud-network  
+      - go-crud-network
+
+  # Go application instance 2
+  app2:
+    image: hrithiksawant/go-crud-api:latest
+    container_name: go_crud_api_2
+    ports:
+      - "${SERVER_PORT2}:3000"  # Make sure the external port is different (e.g., 3001)
+    environment:
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@db:${DB_PORT}/${DB_NAME}?sslmode=disable
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - SERVER_HOST=${SERVER_HOST}
+      - SERVER_PORT=${SERVER_PORT2}
+      - DB_MIGRATION_FILE=/app/db/migrations
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - go-crud-network
+
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:latest
+    container_name: nginx-container
+    ports:
+      - "8080:80"  # Expose port 8080 for load balancing API traffic
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # Mount custom Nginx config
+    depends_on:
+      - app
+    networks:
+      - go-crud-network
+    restart: unless-stopped  # Restart policy to automatically restart Nginx on failure
+
 
 networks:
   go-crud-network:
