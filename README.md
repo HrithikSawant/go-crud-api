@@ -1,6 +1,6 @@
 # GO CRUD REST API Deployment
 
-![Go CRUD REST API Logo](https://github.com/HrithikSawant/go-crud-api/blob/level-4/.assets/GoRest.png)
+![Go CRUD REST API Logo](https://github.com/HrithikSawant/go-crud-api/blob/level-5/.assets/GoRest.png)
 
 
 ![Go Modules](https://img.shields.io/github/go-mod/go-version/HrithikSawant/go-crud-api)
