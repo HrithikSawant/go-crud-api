@@ -1,8 +1,8 @@
-# GO CRUD REST API
+# GO CRUD REST API Deployment
 
 ![Go CRUD REST API Logo](https://github.com/HrithikSawant/go-crud-api/blob/level-4/.assets/GoRest.jpeg)
 
-![CI Status](https://img.shields.io/github/workflow/status/HrithikSawant/go-crud-api/ci?label=CI)
+
 ![Go Modules](https://img.shields.io/github/go-mod/go-version/HrithikSawant/go-crud-api)
 [![GoDoc](https://pkg.go.dev/badge/github.com/HrithikSawant/go-crud-api)](https://pkg.go.dev/github.com/HrithikSawant/go-crud-api)
 ![Docker](https://img.shields.io/badge/Docker-%230db7ed?style=flat&logo=docker&logoColor=white)
@@ -10,140 +10,139 @@
 [![PostgreSQL Supported](https://img.shields.io/badge/PostgreSQL-Supported-4169e1.svg)](https://www.postgresql.org/)
 [![Go Migration Supported](https://img.shields.io/badge/Go_Migrations-Supported-63d368.svg)](https://github.com/golang-migrate/migrate)
 [![GORM Supported](https://img.shields.io/badge/GORM-Supported-9c1e5e.svg)](https://gorm.io/)
+![CI](https://img.shields.io/badge/CI-Passing-brightgreen)
+![CD](https://img.shields.io/badge/CD-Active-brightgreen)
+![Vagrant](https://img.shields.io/badge/Vagrant-Enabled-brightgreen)
+![NGINX](https://img.shields.io/badge/NGINX-Running-brightgreen)
 [![Make Supported](https://img.shields.io/badge/Make-Supported-2d3138.svg)](https://www.gnu.org/software/make/)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
+---
+
 ## Overview
 
-This branch introduces a Continuous Integration (CI) pipeline using **GitHub Actions** to automate the build, test, lint, and deployment process for the **Go CRUD API** project. It also integrates a **self-hosted GitHub runner** to run the pipeline locally on your machine. The CI pipeline is triggered on changes to the code directory and can be manually triggered as well.
+This repository demonstrates the **bare-metal deployment** of the **Go CRUD REST API** project using Vagrant. It includes the following services:
 
-## Features
+- **Nginx** (Port `8080`) - Handles incoming requests and performs load balancing.
+- **2 API Instances** (Ports `8081` & `8082`) - Go REST API instances.
+- **PostgreSQL Database** (Port `5432`) - For persistent data storage.
 
-- **CI Pipeline** using GitHub Actions for automating build, test, lint, Docker login, and Docker push.
-- **Self-Hosted GitHub Runner** to run the pipeline on your local machine.
-- **Docker Integration** for building and pushing the Go API Docker image.
-- **Makefile** to simplify running the commands for building, testing, linting, Docker operations, and database migrations.
+---
+
+## Architecture
+
+Below is the architecture diagram for reference:
+
+![Deployment Diagram](https://github.com/HrithikSawant/go-crud-api/blob/level-5/.assets/bare-metal.png)
+
+- Nginx acts as the **Proxy & load balancer** for the two API instances.
+- Incoming HTTP requests hit port `8080` on Nginx.
+- Nginx forwards the requests to API services (`8081`, `8082`).
+- API services interact with a PostgreSQL database running on port `5432`.
+
+---
 
 ## Prerequisites
 
-Ensure the following tools are installed on your system:
-- **Docker** (for containerization)
-- **Docker Compose** (for managing multi-container applications)
-- **Make** (for automating commands)
-- **GitHub Actions Runner** (for using a self-hosted runner on your local machine)
+Ensure the following tools are installed:
 
-You can follow the installation instructions for these tools here:
-- [Docker Installation](https://docs.docker.com/get-docker/)
-- [Docker Compose Installation](https://docs.docker.com/compose/install/)
-- [Make Installation](https://www.gnu.org/software/make/)
-- [GitHub Actions Self-hosted Runner](https://docs.github.com/en/actions/hosting-your-own-runners)
+1. **Vagrant**: [Install Vagrant](https://www.vagrantup.com/docs/installation)
+2. **VirtualBox**: For Vagrant to provision virtual machines. 
 
-## CI Pipeline Overview
+---
 
-The CI pipeline in this repository is defined using **GitHub Actions** and automates the following stages:
+## Setup Instructions
 
-1. **Build API** - Uses the `make build` target to build the Go application.
-2. **Run Tests** - Runs tests using the `make test` target.
-3. **Perform Code Linting** - Lints the code using `make lint`.
-4. **Docker Login** - Logs into Docker Hub or GitHub Docker Registry using the credentials stored in GitHub Secrets.
-5. **Docker Build and Push** - Builds the Docker image and pushes it to a registry.
-
-### GitHub Actions Workflow (`.github/workflows/ci.yml`)
-
-The pipeline is defined in the `ci.yml` file and includes the following steps:
-
-- **Checkout Code**: Pulls the latest code from the repository.
-- **Set up Go Environment**: Configures the Go environment for the project.
-- **Build the API**: Builds the Go application.
-- **Run Tests**: Executes the tests.
-- **Lint Code**: Runs the code linting.
-- **Docker Login**: Logs into Docker using GitHub Secrets for the credentials.
-- **Docker Build and Push**: Builds the Docker image and pushes it to Docker Hub or GitHub Container Registry.
-
-### Manual Trigger
-
-The CI pipeline can also be triggered manually through the GitHub Actions UI using the `workflow_dispatch` trigger.
-
-## Setting up the CI Pipeline with Self-Hosted Runner
-
-### Step 1: Setup the GitHub Actions Runner Locally
-
-Follow the instructions to set up a **self-hosted GitHub runner** on your local machine. This allows the CI pipeline to run on your local machine instead of GitHub-hosted runners. 
-
-### Step 2: Configure GitHub Secrets
-
-To allow the pipeline to authenticate with Docker Hub or GitHub Container Registry, you need to configure the following secrets in your GitHub repository:
-
-- **DOCKER_USERNAME**: Your Docker Hub or GitHub Container Registry username.
-- **DOCKER_PASSWORD**: Your Docker Hub or GitHub Container Registry password or access token.
-
-To set these secrets, go to **Settings > Secrets and variables > Actions** in your GitHub repository, and add the secrets accordingly.
-
-## Building and Running with Docker
-
-### 1. Build the Docker Image
-
-Build a versioned Docker image using the Makefile:
+### 1. Clone the Repository
 
 ```bash
-make docker-build VERSION=<your_version>
+git clone https://github.com/HrithikSawant/go-crud-api.git
+cd go-crud-api
 ```
 
-For example:
+---
+
+### 2. Vagrant Setup
+
+Spin up the Vagrant box that acts as your production environment:
 
 ```bash
-make docker-build VERSION=1.0.0
+vagrant up
 ```
 
-### 2. Run the Docker Container
+This command performs the following:
+- Creates a Vagrant-managed virtual machine.
+- Executes a **bash script** to install all required dependencies (Go, Nginx, PostgreSQL, etc.).
 
-Run the API in a Docker container:
+---
 
-```bash
-make docker-run VERSION=<your_version>
+### 3. Nginx Configuration
+
+The Nginx configuration for load balancing is located in `nginx/nginx.conf`. It ensures requests are forwarded to the API instances:
+
+```nginx
+events {}
+
+http {
+    upstream go-crud-app {
+            # Point to both app instances (Load Balancing)
+        server go_crud_api_1:3000; # Modify as per your need
+        server go_crud_api_2:3001; # Modify as per your need
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://go-crud-app;  # Use upstream to forward to Go API
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /health {
+            proxy_pass http://go-crud-app/health;  # Health check route
+        }
+    }
+}
+
 ```
 
-For example:
+---
 
-```bash
-make docker-run VERSION=1.0.0
-```
+## Testing the Setup
 
-This command uses the `.env` file to inject environment variables into the container.
+1. **Access the API** via port `8080` on the Vagrant box:
 
-### 3. Stop the Docker Container
+   ```bash
+   curl http://127.0.0.1:8080/health/
+   ```
 
-Stop the running container:
+   You should receive a `200 OK` response.
 
-```bash
-make docker-stop
-```
+2. Use **Postman** or a browser to test API endpoints exposed via Nginx load balancing.
 
-### 4. Push Docker Image
+---
 
-Push the tagged image to a container registry:
+## Accessing the Application
 
-```bash
-make docker-push VERSION=<your_version>
-```
+Once deployed, the application will be accessible as follows:
 
-Ensure you are logged in to your container registry before running this command.
+- **API Endpoint**: `http://127.0.0.1:8080/students/`
+- **Health Check**: `http://127.0.0.1:8080/health/`
 
-## Multi-Stage Dockerfile
+Nginx will load balance requests between the two API services running on ports `8081` and `8082`.
 
-The multi-stage Dockerfile ensures:
-- A smaller final image size by separating build and runtime stages.
-- Faster builds and easier debugging.
-- Security by excluding development tools and files from the runtime image.
-
-## Updated Makefile Commands
-
-| Command        | Description                                               |
-|----------------|-----------------------------------------------------------|
-| `docker-build` | Build a Docker image.                                     |
-| `docker-run`   | Run the application in a Docker container.                |
-| `docker-push`  | Push the Docker image to a container registry.            |
+---
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+---
+
+With this setup:
+- A Vagrant box acts as the production environment.
+- Nginx handles load balancing for high availability.
+- Dependencies are installed using a bash script.
