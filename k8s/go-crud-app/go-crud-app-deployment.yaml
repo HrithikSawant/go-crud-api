@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-crud-app
+spec:
+  replicas: 2  # This will have 2 pods/deployments
+  selector:
+    matchLabels:
+      app: go-crud-app
+  template:
+    metadata:
+      labels:
+        app: go-crud-app
+    spec:
+      containers:
+      - name: go-crud-api
+        image: hrithiksawant/go-crud-api:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: go-crud-app-config
+              key: DB_HOST
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: go-crud-app-secrets
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: go-crud-app-secrets
+              key: DB_PASSWORD
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: go-crud-app-config
+              key: DB_NAME
+        - name: DATABASE_URL
+          value: "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"

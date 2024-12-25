@@ -1,0 +1,34 @@
+#! /usr/bin/env bash
+
+
+echo "Starting deployment of Go CRUD App..."
+
+# Apply ConfigMap
+echo "Applying ConfigMap..."
+kubectl apply -f configmap.yaml
+
+# Apply Secrets
+echo "Applying Secrets..."
+kubectl apply -f secret.yaml
+
+# Deploy PostgreSQL
+echo "Deploying PostgreSQL..."
+kubectl apply -f postgres/postgres-deployment.yaml
+kubectl apply -f postgres/postgres-service.yaml
+
+# Deploy Go CRUD App
+echo "Deploying Go CRUD App..."
+kubectl apply -f go-crud-app/go-crud-app-deployment.yaml
+kubectl apply -f go-crud-app/go-crud-app-service.yaml
+
+# Apply Ingress
+echo "Applying Ingress..."
+kubectl apply -f ingress.yaml
+
+echo "Deployment completed successfully!"
+
+# Show deployment details
+kubectl get pods
+kubectl get svc
+kubectl get ingress
+
