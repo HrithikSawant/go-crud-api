@@ -7,6 +7,3 @@ data:
   DB_HOST: "postgres"  # The name of your PostgreSQL service
   DB_PORT: "5432"
   DB_NAME: "postgres"  # Update Accordingly
-
-
-
