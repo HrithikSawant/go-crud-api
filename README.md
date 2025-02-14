@@ -22,6 +22,12 @@ This repository contains the Kubernetes manifests for deploying a REST API appli
 - Helm for managing Vault installation.
 - Makefile for streamlined deployment and management.
 
+## 🏗️ Architecture Diagram
+
+Below is the high-level architecture of the deployment:
+
+![Deployment Diagram](.assets/k8-deployment.png)
+
 ## Setup Instructions
 
 ### 1. Start Kubernetes Cluster
