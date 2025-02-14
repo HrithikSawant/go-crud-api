@@ -2,7 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: go-crud-app-config
+  namespace: go-crud-api
 data:
   DB_HOST: "postgres"  # The name of your PostgreSQL service
   DB_PORT: "5432"
-  DB_NAME: "postgres" # Update Accordingly
+  DB_NAME: "postgres"  # Update Accordingly
+
+
+
