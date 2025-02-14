@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: go-crud-app
+  namespace: go-crud-api
 spec:
   replicas: 2  # This will have 2 pods/deployments
   selector:
