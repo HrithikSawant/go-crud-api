@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: go-crud-api
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault-ns
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-secrets-ns
