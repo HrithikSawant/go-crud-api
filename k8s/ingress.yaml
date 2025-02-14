@@ -2,9 +2,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: go-crud-app-ingress
+  namespace: go-crud-api
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   rules:
     - host: go-crud-app.local  # This is the hostname you'll use for testing
       http:
