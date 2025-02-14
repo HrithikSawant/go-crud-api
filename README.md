@@ -93,6 +93,14 @@ helm install vault hashicorp/vault --namespace vault-ns --version 0.29.1
 kubectl create secret generic vault-token -n external-secrets-ns --from-literal=token="YourToken"
 ```
 
+## 🏗️ Vault UI
+
+Below are hashicorp vault UI:
+
+![Init-Vault](.assets/init-vault.png)
+![Key Generation](.assets/keys.png)
+![Init-db](.assets/kv-db.png)
+
 ## License
 
 This project is licensed under the MIT License.
