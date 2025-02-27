@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "go-crud-app.fullname" . }}  # Prefixing with release name
+  namespace: {{ .Values.global.namespace.app }}
+spec:
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+  selector:
+    app: {{ .Values.service.appSelector }}  # Ensure selector aligns with Deployment labels

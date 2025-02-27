@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-go-crud-app-config  # More dynamic and avoids conflicts
+  namespace: {{ .Values.global.namespace.app }}
+data:
+  DB_HOST: {{ .Release.Name }}-postgres.{{ .Values.global.namespace.app }}.svc.cluster.local # Postgres service name with namespace for internal DNS
+  DB_PORT: "{{ .Values.db.port | default "5432" }}"  # Default DB port if not provided
+  DB_NAME: "{{ .Values.db.name | default "postgres" }}"  # Default database name

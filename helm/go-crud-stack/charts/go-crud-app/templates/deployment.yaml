@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "go-crud-app.fullname" . }}  # Prefixing with release name
+  namespace: {{ .Values.global.namespace.app }}  # Explicitly using the app's specific namespace
+  labels:
+    app: {{ include "go-crud-app.name" . }}  # Ensuring uniqueness
+    {{- include "go-crud-app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}  # Default to 1 replica if not set
+  selector:
+    matchLabels:
+      app: {{ include "go-crud-app.name" . }}  # Ensuring selector matches template labels
+  template:
+    metadata:
+      labels:
+        app: {{ include "go-crud-app.name" . }}  # Ensuring pod labels match selector
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+        ports:
+        - containerPort: {{ .Values.service.targetPort }} 
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-go-crud-app-config
+              key: DB_HOST
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-go-crud-app-secrets
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-go-crud-app-secrets
+              key: DB_PASSWORD
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-go-crud-app-config
+              key: DB_NAME
+        - name: DATABASE_URL
+          value: "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):{{ .Values.db.port }}/$(DB_NAME)?sslmode=disable"

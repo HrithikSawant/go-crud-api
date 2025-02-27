@@ -1,0 +1,19 @@
+vaultBackend:
+  server: "http://vault.vault-ns.svc.cluster.local:8200"
+  path: "kv"
+  version: "v2"
+  tokenSecretRef:
+    name: vault-token
+    key: token
+
+externalSecret:
+  data:
+    DB_USER:
+      key: "kv/db-credentials"
+      property: "DB_USER"
+    DB_PASSWORD:
+      key: "kv/db-credentials"
+      property: "DB_PASSWORD"
+
+eso:
+  vaultToken: "YourVaultToken"  # Your Vault token

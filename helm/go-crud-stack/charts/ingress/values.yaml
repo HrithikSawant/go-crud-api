@@ -1,0 +1,8 @@
+rewriteTarget: /
+ingressClassName: nginx
+host: "go-crud-app.local"
+path: /
+pathType: Prefix
+
+backendService:
+  port: 8080

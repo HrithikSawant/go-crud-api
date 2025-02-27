@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "ingress.fullname" . }} # Prefix with release name
+  namespace: {{ .Values.global.namespace.app }}  # Namespace for the ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.rewriteTarget | quote }}
+spec:
+  ingressClassName: {{ .Values.ingressClassName | quote }}
+  rules:
+    - host: {{ .Release.Name }}-{{ .Values.host }}
+      http:
+        paths:
+          - path: {{ .Values.path | quote }}
+            pathType: {{ .Values.pathType | quote }}
+            backend:
+              service:
+                name: {{ .Release.Name }}-go-crud-app 
+                port:
+                  number: {{ .Values.backendService.port }}

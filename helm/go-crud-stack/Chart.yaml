@@ -1,0 +1,26 @@
+apiVersion: v2
+name: go-crud-stack
+description: An umbrella chart to deploy the complete go-crud stack.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+dependencies:
+  - name: go-crud-app
+    version: 0.1.0
+    repository: "file://charts/go-crud-app"
+
+  - name: postgres
+    version: 0.1.0
+    repository: "file://charts/postgres"
+
+  - name: ingress
+    version: 0.1.0
+    repository: "file://charts/ingress"
+
+  - name: external-secrets
+    version: 0.1.0
+    repository: "file://charts/external-secrets"
+
+maintainers:
+  - name: Hrithik

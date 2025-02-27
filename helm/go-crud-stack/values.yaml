@@ -1,0 +1,10 @@
+global:
+  namespace:
+    app: go-crud-api  # Default global namespace for all subcharts
+    eso: external-secrets-ns  # ESO-specific namespace
+
+db:
+  host: "{{ .Release.Name }}-postgres"  # Can be overridden by parent chart
+  port: 5432
+  name: "postgres"  # Default DB name, can be overridden
+

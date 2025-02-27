@@ -1,0 +1,16 @@
+replicaCount: 2  # Can be overridden by parent chart
+
+image:
+  repository: hrithiksawant/go-crud-api
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 3000
+
+db:
+  port: 5432
+
+global: {}  # This allows values to be inherited from the parent chart

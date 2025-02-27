@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: postgres
+  tag: "13"
+
+containerPort: 5432
+
+secret:
+  postgresUserKey: DB_USER
+  postgresPasswordKey: DB_PASSWORD
+
+configMap:
+  name: go-crud-app-config
+  postgresDbKey: DB_NAME
+
+service:
+  type: ClusterIP
+  port: 5432
+  targetPort: 5432
+  appSelector: postgres
+
+global: {}  # This allows values to be inherited from the parent chart

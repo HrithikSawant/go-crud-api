@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "postgres.fullname" . }}  # Prefix with release name
+  namespace: {{ .Values.global.namespace.app }}
+  labels:
+    app: {{ include "postgres.name" . }}  # Ensure unique label
+    {{- include "postgres.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ include "postgres.name" . }}  # Ensure selector matches labels
+      {{- include "postgres.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "postgres.name" . }}  # Ensure pod labels match selector
+        {{- include "postgres.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: postgres
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.containerPort | default 5432 }}
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-go-crud-app-secrets
+              key: {{ .Values.secret.postgresUserKey }}
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-go-crud-app-secrets
+              key: {{ .Values.secret.postgresPasswordKey }}
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-go-crud-app-config
+              key: {{ .Values.configMap.postgresDbKey }}
